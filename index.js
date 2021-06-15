@@ -1,6 +1,6 @@
 "use strict";
 
-console.log('Beep, boop! Baka! 👅');
+console.log('Beep, boop!');
 
 require('dotenv').config();
 
@@ -13,22 +13,27 @@ bot.login(process.env.TOKEN);
 bot.on('ready', readyDiscord);
 
 function readyDiscord() {
-    console.log('💖');
+    console.log('Kotori-bot ready to go master. 💖');
 }
 
 bot.on('message', gotMessage);
 
 async function gotMessage(msg) {
-    
-    if (msg.content === 'hi') {
-        msg.channel.send('おはよう Ohayo! ^-^ 💕');
-    } else if (msg.content == '!gif') {
-      
-        let url = `https://g.tenor.com/v1/search?q=kotori&key=${process.env.TENORKEY}&limit=8`;
 
+        let tokens = msg.content.split(" ");
+    
+    if (tokens[0] === 'hi') {
+        msg.channel.send('おはよう Ohayo! ^-^ 💕');
+    } else if (tokens[0] == '!gif') {
+
+        let keywords = 'anime girl';
+        if (tokens.length > 1) {
+            keywords = tokens.slice(1, tokens.length).join(" ");
+        }
+      
+        let url = `https://g.tenor.com/v1/search?q=${keywords}&key=${process.env.TENORKEY}&ContentFilter=low`;
         let response = await fetch(url);
         let json = await response.json();
-        console.log(json);
         const index = Math.floor(Math.random() * json.results.length);
 
         msg.channel.send(json.results[index].url);
